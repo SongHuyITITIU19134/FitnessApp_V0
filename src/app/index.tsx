@@ -1,39 +1,34 @@
-import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useState } from 'react';
+import { Button, FlatList, StyleSheet, TextInput, View } from 'react-native';
+import FoodListItem from '../components';
 
-const FoodListItem = ({ item }) => {
-  return (
-    <View style={{
-      backgroundColor: "gainsboro",
-      padding: 10,
-      borderRadius: 5,
 
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    }}>
-      <View style={{ flex: 1, gap: 5, }}>
-        <Text style={{ fontWeight: 'bold', fontSize: 16 }}> {item.lable}</Text>
-        <Text style={{ color: 'dimgray' }}>{item.cal} cal, {item.brand}</Text>
-      </View>
-      <View style={{ marginRight: 10, }}>
-        <TouchableOpacity>
-          <AntDesign name="pluscircleo" size={24} color="royalblue" />
-        </TouchableOpacity>
-
-      </View>
-    </View>
-  )
-
-}
-
+const FoodItem = [
+  { lable: 'Apple', cal: 50, brand: "Binh Phuoc" },
+  { lable: 'Chicken', cal: 150, brand: "USA" },
+  { lable: 'Pizza', cal: 370, brand: "Italy" }
+]
 export default function App() {
+
+  const [search, setSearch] = useState('');
+  const performSearch = () => {
+    console.warn("Searching...", search)
+    setSearch(search);
+  }
+
   return (
     <View style={styles.container}>
       {/* Food Item View */}
-      <FoodListItem item={{ lable: 'Pizza', cal: 50, brand: "Binh Phuoc" }} />
-      <FoodListItem item={{ lable: 'Chicken', cal: 200, brand: "USA" }} />
+      <TextInput value={search} onChangeText={setSearch} placeholder='Searching...' style={styles.input} />
+
+      {search && <Button title='Searching' onPress={performSearch} />}
+      <FlatList
+        data={FoodItem}
+        renderItem={({ item }) => <FoodListItem item={item} />}
+        contentContainerStyle={{ gap: 5 }}
+      />
+
 
       <StatusBar style="auto" />
     </View>
@@ -46,5 +41,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 10,
     justifyContent: 'center',
+    gap: 15
   },
+  input: {
+    backgroundColor: '#e2e2e2',
+    padding: 10,
+    borderRadius: 5,
+  }
 });
